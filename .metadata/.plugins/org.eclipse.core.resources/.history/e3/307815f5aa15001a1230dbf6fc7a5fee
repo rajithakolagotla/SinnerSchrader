@@ -1,0 +1,65 @@
+package com.sinnerSchrader.qa.pages;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Action;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.PageFactory;
+
+import com.relevantcodes.extentreports.model.Log;
+import com.sinnerSchrader.qa.base.TestBase;
+import com.sinnerSchrader.qa.util.GenericActions;
+import com.sinnerSchrader.qa.util.Global;
+
+public class HorizontalSliderPage extends TestBase{
+	String range;
+	
+	public static By txtSliderRange = By.xpath("//input[@type= 'range']");
+	//public static By slider = By.xpath("");
+	
+	
+	
+	public HorizontalSliderPage() {
+		PageFactory.initElements(driver, this);
+		driver.get(prop.getProperty("MoveSliderUrl"));
+
+	}
+	
+	public void sliderOperations() {
+		GenericActions.mouseMoveToElementandClick(driver, txtSliderRange, Global.timeOut);
+		GenericActions.pressENDKey(driver, txtSliderRange, Global.timeOut);
+		String maxrange = GenericActions.getElementAttributeValue(driver, txtSliderRange, Global.timeOut,"value");
+		GenericActions.logger.info("Slider value after drage MAX:"+maxrange );
+		if(maxrange.contains("5")) {
+			System.out.println("clcking");
+
+			GenericActions.mouseMoveToElementandClick(driver, txtSliderRange, Global.timeOut);
+			//GenericActions.clickElementUsingActions(driver, txtSliderRange, Global.timeOut);
+			System.out.println("clcking");
+			GenericActions.pressHOMEKey(driver, txtSliderRange, Global.timeOut);
+			String minRange = GenericActions.getElementAttributeValue(driver, txtSliderRange, Global.timeOut,"value");
+			GenericActions.logger.info("Slider value after drage MAX:"+minRange );
+
+		}
+	}
+	
+	public boolean horizontalSlider() {
+		try {
+		range = GenericActions.getElementAttributeValue(driver, txtSliderRange, Global.timeOut,"value");
+		GenericActions.logger.info("Initial Slider value:"+range );
+		if(range.contains("0")) {
+			sliderOperations();
+	   }
+			else  {
+				GenericActions.pressHOMEKey(driver, txtSliderRange, Global.timeOut);
+				sliderOperations();
+		}
+		return true;
+
+	}
+		catch (Exception e) {
+			// TODO: handle exception
+			return false;
+		}
+}
+}

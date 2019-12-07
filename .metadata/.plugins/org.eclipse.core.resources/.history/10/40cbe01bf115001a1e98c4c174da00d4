@@ -1,0 +1,48 @@
+package com.sinnerSchrader.qa.pages;
+
+import java.io.IOException;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.support.PageFactory;
+
+import com.relevantcodes.extentreports.LogStatus;
+import com.sinnerSchrader.qa.base.TestBase;
+import com.sinnerSchrader.qa.testCases.Test1;
+import com.sinnerSchrader.qa.util.GenericActions;
+import com.sinnerSchrader.qa.util.Global;
+
+public class LoginPage extends TestBase {
+	
+	//Page ObjectRepository
+		public static By txtAuthmsg = By.xpath("//div[@class= 'example']/p");	
+
+		// Initializing the elements with the help of page factory
+
+	public LoginPage() {
+		PageFactory.initElements(driver, this);
+		driver.get("https://admin:admin@the-internet.herokuapp.com/basic_auth");
+
+	}
+	public boolean logIn() throws InterruptedException, IOException {
+
+		driver.get("https://admin:admin@the-internet.herokuapp.com/basic_auth");
+		Global.bStatus = GenericActions.waitForElementVisible(driver, txtAuthmsg, Global.timeOut);
+		if (Global.bStatus == true) {
+			String authMsg = GenericActions.getText(driver, txtAuthmsg, Global.timeOut);
+			if(authMsg.contains("Congratulations")) {
+			Test1.extentTest.log(LogStatus.INFO, " Basic Auth is successfull : "+authMsg);
+			}
+			
+			return true;
+		}
+				
+		
+		
+		else {
+			Test1.extentTest.log(LogStatus.INFO, " Basic Auth is not successfull ");
+
+		}
+		return true;
+		}
+	
+}

@@ -1,0 +1,71 @@
+package com.sinnerSchrader.qa.pages;
+
+import java.io.IOException;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+import org.testng.Assert;
+
+import com.sinnerSchrader.qa.base.TestBase;
+import com.sinnerSchrader.qa.util.GenericActions;
+import com.sinnerSchrader.qa.util.Global;
+import com.sinnerSchrader.qa.util.TestUtil;
+
+public class LoginPage extends TestBase {
+
+	
+	//Page Factory (or) ObjectRepository
+	
+	
+	public static By btnlogin = By.xpath("//button[contains(@class,'login-btn block')]");
+	public static By txtemail = By.xpath("//input[@name= 'email' and contains(@class,'w-full bg-white rounded')]");
+	public static By txtpassword = By.xpath("//input[@name= 'password' and contains(@class,'w-full rounded')]");
+	public static By btnsignIn = By.xpath("//button[@id= 'js-login-btn']");
+	public static By university = By.xpath("//select[@name='university']");
+	public static By txterrormsg = By.xpath("//div[contains(@class,'error-box ')]");
+	/*	
+	@FindBy(xpath = "//button[contains(@class,'login-btn block')]")
+	WebElement loginbtn;
+
+	@FindBy(xpath="//input[@name= 'email' and contains(@class,'w-full bg-white rounded')]")
+	WebElement email;
+
+	@FindBy(xpath="//input[@name= 'password' and contains(@class,'w-full rounded')]")
+	WebElement password;
+
+	@FindBy(xpath = "//button[@id= 'js-login-btn']")
+	WebElement signIn;
+
+	@FindBy(xpath = "//select[@name='university']")
+	WebElement university;
+
+*/
+
+	public LoginPage() {
+		PageFactory.initElements(driver, this);
+	}
+	public void logIn(String username, String password) throws InterruptedException, IOException {
+		//Clicking Login button to navigate to Login screen
+		GenericActions.waitAndClick(driver, btnlogin, Global.timeOut);
+		GenericActions.mouseMoveToElementandClick(driver, txtemail, Global.timeOut);
+		// Entering email to login to the application
+
+		GenericActions.enterText(driver, txtemail, Global.timeOut, username);
+		// Entering password to login to the application
+
+		GenericActions.enterText(driver, txtpassword, Global.timeOut, password);
+		GenericActions.waitAndClick(driver, btnsignIn, Global.timeOut);
+		String emailMsg = GenericActions.getText(driver, txterrormsg, Global.timeOut);
+		// Verifying error message
+		Global.bStatus = GenericActions.waitForElementVisible(driver, txterrormsg, Global.timeOut);
+		if(Global.bStatus == true) {
+			System.out.println(username+": "+emailMsg);
+		}	
+
+		
+	}
+
+}

@@ -1,0 +1,95 @@
+package com.sinnerSchrader.qa.testCases;
+
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
+
+import com.relevantcodes.extentreports.ExtentReports;
+import com.relevantcodes.extentreports.ExtentTest;
+import com.sinnerSchrader.qa.base.TestBase;
+import com.sinnerSchrader.qa.pages.HorizontalSliderPage;
+
+public class Test extends TestBase {
+
+	HorizontalSliderPage horizontalSliderPage;
+
+	public ExtentReports extent;
+	public ExtentTest extentTest;
+
+	public Test() {
+		super();
+	}
+
+	@BeforeTest
+	public void setExtent(){
+		extent = new ExtentReports(System.getProperty("user.dir")+"//Results//sinnerSchrader.html", true);
+	}
+
+	@AfterTest
+	public void endReport(){
+		extent.flush();
+		extent.close();
+	}
+
+	
+	@BeforeMethod
+	public void setUp() throws InterruptedException {
+
+		initilazation();
+		horizontalSliderPage = new HorizontalSliderPage(); 
+		
+	}
+
+
+	@Test(priority = 0)
+	public void signuptest() throws Exception {
+		extentTest = extent.startTest("signuptest");
+
+		signUpPage.signUp(prop.getProperty("username") ,prop.getProperty("password"));
+		 universitySelect.University(prop.getProperty("university"));
+		areaOfStudies.selectAreaOfStudies();
+		sudentDetails.enterStudentDetails();
+		 homePage.joinCourse();
+		Global.bStatus = homePage.deleteCourse(prop.getProperty("areaOfStudies"));
+		Global.bStatus = homePage.logout();
+		
+		Assert.assertTrue(Global.bStatus);
+	}
+	@Test(priority = 1)
+	public void emailValidationtest() throws Exception {
+		loginPage.logIn(prop.getProperty("username") ,prop.getProperty("password"));
+		emailValidationPage.emailValidation();
+	}
+	
+	@AfterMethod
+	public void tearDown(ITestResult result) throws IOException {
+
+
+		if(result.getStatus()==ITestResult.FAILURE){
+			extentTest.log(LogStatus.FAIL, "TEST CASE FAILED IS "+result.getName()); //to add name in extent report
+			extentTest.log(LogStatus.FAIL, "TEST CASE FAILED IS "+result.getThrowable()); //to add error/exception in extent report
+			
+			String screenshotPath = TestUtil.getScreenshot(driver, result.getName());
+			extentTest.log(LogStatus.FAIL, extentTest.addScreenCapture(screenshotPath)); //to add screenshot in extent report
+			//extentTest.log(LogStatus.FAIL, extentTest.addScreencast(screenshotPath)); //to add screencast/video in extent report
+		}
+		else if(result.getStatus()==ITestResult.SKIP){
+			extentTest.log(LogStatus.SKIP, "Test Case SKIPPED IS " + result.getName());
+			String screenshotPath = TestUtil.getScreenshot(driver, result.getName());
+			extentTest.log(LogStatus.SKIP, extentTest.addScreenCapture(screenshotPath)); //to add screenshot in extent report
+		}
+		else if(result.getStatus()==ITestResult.SUCCESS){
+			extentTest.log(LogStatus.PASS, "Test Case PASSED IS " + result.getName());
+			String screenshotPath = TestUtil.getScreenshot(driver, result.getName());
+			extentTest.log(LogStatus.PASS, extentTest.addScreenCapture(screenshotPath)); //to add screenshot in extent report
+		}
+		
+		extent.endTest(extentTest); //ending test and ends the current test and prepare to create html report
+		driver.quit();
+	}
+	
+	
+	
+	
+	
+}

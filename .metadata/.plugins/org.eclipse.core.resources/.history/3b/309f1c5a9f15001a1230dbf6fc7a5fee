@@ -1,0 +1,28 @@
+package com.sinnerSchrader.qa.pages;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.support.PageFactory;
+
+import com.sinnerSchrader.qa.base.TestBase;
+import com.sinnerSchrader.qa.util.GenericActions;
+import com.sinnerSchrader.qa.util.Global;
+
+public class HorizontalSliderPage extends TestBase{
+	String range;
+	
+	public static By txtSliderRange = By.xpath("//input[@type= 'range']");
+	
+	
+	
+	public HorizontalSliderPage() {
+		PageFactory.initElements(driver, this);
+		driver.get(prop.getProperty("MoveSliderUrl"));
+
+	}
+	public boolean horizontalSlider() {
+		range = GenericActions.getElementAttributeValue(driver, txtSliderRange, Global.timeOut,"value");
+		System.out.println("range"+range);
+		return true;
+		
+	}
+}

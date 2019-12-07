@@ -1,0 +1,80 @@
+package com.sinnerSchrader.qa.pages;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.support.PageFactory;
+
+import com.relevantcodes.extentreports.LogStatus;
+import com.sinnerSchrader.qa.base.TestBase;
+import com.sinnerSchrader.qa.testCases.SinnerSchraderTest;
+import com.sinnerSchrader.qa.util.GenericActions;
+import com.sinnerSchrader.qa.util.Global;
+
+public class HorizontalSliderPage extends TestBase{
+	String range;
+
+	//Page ObjectRepository
+	public static By txtSliderRange = By.xpath("//input[@type= 'range']");	
+
+	// Initializing the elements with the help of page factory
+	public HorizontalSliderPage() {
+		PageFactory.initElements(driver, this);
+		driver.get(prop.getProperty("MoveSliderUrl"));
+
+	}
+
+	/**
+	 * Description: This method is used to Set the focus on the slider by mouseover on it and moving the slider using using Home and End keys to Min to Max and Max to Min. 
+	 * It asserts the Max and Min values of the slider in Extending report.
+	 * Keywords: mouseMoveToElementandClick, pressENDKey,pressHOMEKey, getElementAttributeValue
+	 * return: boolean	 
+	 */
+
+	public boolean sliderOperations() {
+		try {
+			GenericActions.mouseMoveToElementandClick(driver, txtSliderRange, Global.timeOut);
+			GenericActions.pressENDKey(driver, txtSliderRange, Global.timeOut);
+			String maxrange = GenericActions.getElementAttributeValue(driver, txtSliderRange, Global.timeOut,"value");
+			SinnerSchraderTest.extentTest.log(LogStatus.INFO, "Slider value after drage to MAX: "+maxrange);
+			if(maxrange.contains("5")) {
+				GenericActions.mouseMoveToElementandClick(driver, txtSliderRange, Global.timeOut);
+				GenericActions.pressHOMEKey(driver, txtSliderRange, Global.timeOut);
+				String minRange = GenericActions.getElementAttributeValue(driver, txtSliderRange, Global.timeOut,"value");
+				SinnerSchraderTest.extentTest.log(LogStatus.INFO, "Slider value after drage to Min: "+minRange);
+
+			}
+			return true;
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+			return false;
+		}
+	}
+
+	/**
+	 * Description: This method is used to verifies the slider value and perform the Min and Max operations using sliderOperations() method.
+	 * Keywords: getElementAttributeValue, pressHOMEKey	 
+	 * Method: sliderOperations()
+	 * return: boolean
+	 */
+	public boolean horizontalSlider() {
+		try {
+			driver.get(prop.getProperty("MoveSliderUrl"));
+			range = GenericActions.getElementAttributeValue(driver, txtSliderRange, Global.timeOut,"value");
+			SinnerSchraderTest.extentTest.log(LogStatus.INFO, "Initial Slider value: "+range);
+
+			if(range.contains("0")) {
+				sliderOperations();
+			}
+			else  {
+				GenericActions.pressHOMEKey(driver, txtSliderRange, Global.timeOut);
+				sliderOperations();
+			}
+			return true;
+
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+			return false;
+		}
+	}
+}

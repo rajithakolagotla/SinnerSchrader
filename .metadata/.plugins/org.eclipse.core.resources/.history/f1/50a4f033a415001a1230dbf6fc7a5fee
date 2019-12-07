@@ -1,0 +1,49 @@
+package com.sinnerSchrader.qa.pages;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Action;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.PageFactory;
+
+import com.sinnerSchrader.qa.base.TestBase;
+import com.sinnerSchrader.qa.util.GenericActions;
+import com.sinnerSchrader.qa.util.Global;
+
+public class HorizontalSliderPage extends TestBase{
+	String range;
+	
+	public static By txtSliderRange = By.xpath("//input[@type= 'range']");
+	//public static By slider = By.xpath("");
+	
+	
+	
+	public HorizontalSliderPage() {
+		PageFactory.initElements(driver, this);
+		driver.get(prop.getProperty("MoveSliderUrl"));
+
+	}
+	public boolean horizontalSlider() {
+		range = GenericActions.getElementAttributeValue(driver, txtSliderRange, Global.timeOut,"value");
+		System.out.println(range);
+		if(range == "0") {
+			System.out.println("clcking");
+
+			GenericActions.mouseMoveToElementandClick(driver, txtSliderRange, Global.timeOut);
+			//GenericActions.clickElementUsingActions(driver, txtSliderRange, Global.timeOut);
+			System.out.println("clcking");
+			GenericActions.pressENDKey(driver, txtSliderRange, Global.timeOut);
+			
+			/*WebElement slider = driver.findElement(txtSliderRange);
+			Actions move = new Actions(driver);
+	        Action action = (Action) move.dragAndDropBy(slider, 0, 5).build();
+	        action.perform();*/
+	   }
+		
+		
+		
+		
+		return true;
+		
+	}
+}

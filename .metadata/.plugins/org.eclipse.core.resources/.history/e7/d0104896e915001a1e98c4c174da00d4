@@ -1,0 +1,61 @@
+package com.sinnerSchrader.qa.pages;
+
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.List;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.PageFactory;
+
+import com.sinnerSchrader.qa.base.TestBase;
+import com.sinnerSchrader.qa.util.GenericActions;
+import com.sinnerSchrader.qa.util.Global;
+
+public class BrokenImagesPage extends TestBase {
+	
+	//Page ObjectRepository
+		public static By imgCount = By.tagName("img");	
+
+		// Initializing the elements with the help of page factory
+		public BrokenImagesPage() {
+			PageFactory.initElements(driver, this);
+			driver.get(prop.getProperty("brokenImagesUrl"));
+
+		}
+
+
+		/**
+		 * Description: This method is used to  mouseover on pictures and get the user details and view the user profile by clicking on View Profile link
+		 * It asserts the number of users and user details(Name) and print on Extending report.
+		 * Keywords: getWebElements, waitForElementVisible,getText
+		 * return: boolean	  
+		 */
+public boolean BrokenImages() {
+		List<WebElement> imagesList = GenericActions.getWebElements(imgCount, driver, Global.timeOut);
+	 //List<WebElement> list = driver.findElements(imgCount);
+	 //System.out.println("Total number of Images on webpage:---->>" + list.size());
+		try {
+     for (WebElement ele : imagesList) {
+         
+             HttpURLConnection conn = (HttpURLConnection) new URL(ele.getAttribute("src")).openConnection();
+             conn.setRequestMethod("GET");
+             int responceCode = conn.getResponseCode();
+             if (responceCode != 200) {
+                 System.out.println("Broken Image:---->>" + ele.getAttribute("src"));
+             } else {
+                 System.out.println("Fine Image:------->>" + ele.getAttribute("src"));
+             }
+
+     }
+             return true;
+ 		}
+ 		catch (Exception e) {
+ 			// TODO: handle exception
+ 			return false;
+ 
+     }
+
+}
+}
+

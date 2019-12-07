@@ -1,0 +1,28 @@
+package com.sinnerSchrader.qa.pages;
+
+import java.io.IOException;
+
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+import org.testng.Assert;
+
+import com.sinnerSchrader.qa.base.TestBase;
+import com.sinnerSchrader.qa.util.GenericActions;
+import com.sinnerSchrader.qa.util.Global;
+import com.sinnerSchrader.qa.util.TestUtil;
+
+public class LoginPage extends TestBase {
+
+	public LoginPage() {
+		PageFactory.initElements(driver, this);
+	}
+	public void logIn() throws InterruptedException, IOException {
+		//driver.get("https://admin:admin@the-internet.herokuapp.com/basic_auth");
+			}
+	
+	
+}

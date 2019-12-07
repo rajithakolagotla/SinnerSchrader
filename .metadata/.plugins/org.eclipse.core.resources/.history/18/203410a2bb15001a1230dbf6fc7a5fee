@@ -1,0 +1,19 @@
+package com.sinnerSchrader.qa.pages;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.support.PageFactory;
+
+import com.sinnerSchrader.qa.base.TestBase;
+
+public class UserDetailsPage extends TestBase {
+	//Page ObjectRepository
+		public static By txtSliderRange = By.xpath("//input[@type= 'range']");	
+
+		// Initializing the elements with the help of page factory
+		public UserDetailsPage() {
+			PageFactory.initElements(driver, this);
+			driver.get(prop.getProperty("UserDetailsUrl"));
+
+		}
+
+}

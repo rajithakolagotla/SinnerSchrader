@@ -1,0 +1,580 @@
+package com.sinnerSchrader.qa.util;
+
+import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+/**
+ *Description: This class contains all generic action methods 
+ */
+public class GenericActions 
+{
+
+	private static Logger logger = Logger.getLogger(GenericActions.class);
+	private static boolean bStatus;
+	private static Actions action;
+	private static Select select;
+	private static WebDriverWait wait = null;
+	
+	private static WebElement element;
+
+	
+
+	/**
+	 * Description: This method is used to wait until element is clickable on given time wait.If the element is clickable in given time it performs click action on it and returns True otherwise False
+	 *Parameters: WebDriver driver,By locator,int timeOut
+	 *return: boolean
+	 *Method Name: waitAndClick
+	 */
+
+	public static boolean waitAndClick(WebDriver driver,By locator,int timeOut)
+	{
+		try {
+			
+			
+			bStatus = Wait.waitForElementVisible(driver, locator, timeOut);
+			if(bStatus)
+			{
+				driver.findElement(locator).click();
+				return true;
+			}
+			else
+				return false;
+		} catch (Exception e) {
+			logger.info("Exception raised in waitAndClick method"+e.getMessage());
+			return false;
+		}
+	}
+	
+	
+	/**
+	 * Description: This method is used to wait until element is visible on given time wait.If the element is visible in given time it returns True otherwise False
+	 *Parameters: WebDriver driver,By locator,int timeOut
+	 *return: boolean
+	 *Method Name: waitForElementVisible
+	 */
+
+	public static boolean waitForElementVisible(WebDriver driver,By locator,int timeOut)
+	{
+		try {
+			wait = new WebDriverWait(driver, timeOut);
+			element = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+			if(element != null)
+				return true;
+			else
+				return false;
+		} catch (Exception e) {
+			logger.info("Exception raised in waitForElementVisible method"+e.getMessage());
+			return false;
+		}
+	}
+
+	/**
+	 * Description: This method is used to wait until element is visible on given time wait.If the element is visible in given time it performs clear first then enter data in it and returns True otherwise False
+	 *Parameters: WebDriver driver,By locator,int timeOut,String testData
+	 *return: boolean
+	 *Method Name: enterText
+	 */
+
+	public static boolean enterText(WebDriver driver,By locator,int timeOut,String testData)
+	{
+		try {
+			bStatus = Wait.waitForElementVisible(driver, locator,timeOut);
+			if(bStatus)
+			{
+				driver.findElement(locator).clear();
+				driver.findElement(locator).sendKeys(testData);
+				return true;
+			}
+			else
+				return false;
+		} catch (Exception e) {
+			logger.info("Exception raised in enterText method"+e.getMessage());
+			return false;
+		}
+	}
+
+
+	/**
+	 * Description: This method is used to wait until element is visible on given time wait.If the element is visible in given time it performs clear first then enter data in it using actions class implementation and returns True otherwise False
+	 *Parameters: WebDriver driver,By locator,int timeOut,String testData
+	 *return: boolean
+	 *Method Name: enterTextUsingActions
+	 */
+
+	public static boolean enterTextUsingActions(WebDriver driver,By locator,int timeOut,String testData)
+	{
+		try {
+			action = new Actions(driver);
+			bStatus = Wait.waitForElementVisible(driver, locator,timeOut);
+			if(bStatus)
+			{
+				action.sendKeys(testData,Keys.CLEAR).build().perform();
+				action.sendKeys(testData).build().perform();
+				return true;
+			}
+			else
+				return false;
+		} catch (Exception e) {
+			logger.info("Exception raised in enterTextUsingActions method"+e.getMessage());
+			return false;
+		}
+	}
+
+	/**
+	 * Description: This method is used to wait until element is visible on given time wait.If the element is visible in given time it returns the WebElement otherwise null
+	 *Parameters: WebDriver driver,By locator,int timeOut
+	 *return: WebElement
+	 *Method Name: getWebElement
+	 */
+
+	public static WebElement getWebElement(WebDriver driver,By locator,int timeOut)
+	{
+		try {
+			bStatus = Wait.waitForElementVisible(driver, locator, timeOut);
+			if(bStatus)
+				return driver.findElement(locator);
+			else
+				return null;
+		} catch (Exception e) {
+			logger.info("Exception raised in getWebElement method"+e.getMessage());
+			return null;
+		}
+	}
+
+	/**
+	 * Description: This method is used to wait until element is visible on given time wait.If the element is visible in given time it returns the list of WebElements otherwise null
+	 *Parameters: By locator,WebDriver driver,int timeOut
+	 *return: List
+	 *Method Name: getWebElements
+	 */
+
+	public static List<WebElement> getWebElements(By locator,WebDriver driver,int timeOut)
+	{
+		try {
+			bStatus = Wait.waitForElementVisible(driver,locator, timeOut);
+			if(bStatus)
+				return driver.findElements(locator);
+			else
+				return null;
+		} catch (Exception e) {
+			logger.info("Exception raised in getWebElements method"+e.getMessage());
+			return null;
+		}
+	}
+	/**
+	 * Description: This method is used to wait until element is visible on given time wait.If the element is visible in given time it selects the dropdown based on the provided text and returns True otherwise False
+	 *Parameters: By locator,WebDriver driver,int timeOut,String dropDownText
+	 *return: boolean
+	 *Method Name: selectDropDownByText
+	 *Note: This method will work if the drop down implemented using Select tag only
+	 */
+
+	public static boolean selectDropDownByText(By locator,WebDriver driver,int timeOut,String dropDownText)
+	{
+		try {
+			element = getWebElement(driver,locator, timeOut);
+			if(element != null)
+			{
+				select = new Select(element);
+				select.selectByVisibleText(dropDownText);
+				return true;
+			}
+			else
+				return false;
+		} catch (Exception e) {
+			logger.info("Exception raised in selectDropDownByText method"+e.getMessage());
+			return false;
+		}
+	}
+
+	/**
+	 * Description: This method is used to wait until element is visible on given time wait.If the element is visible in given time it selects the dropdown based on the provided dropdown value
+	 *Parameters: WebDriver driver,By locator,int timeOut,String dropDownValue
+	 *return: boolean
+	 *Method Name: selectDropDownByValue
+	 *Note: This method will work if the drop down implemented using Select tag only and dropDownValue means the value of value attribute in option tag under select tag
+	 */
+
+	public static boolean selectDropDownByValue(WebDriver driver,By locator,int timeOut,String dropDownValue)
+	{
+		try {
+			element = getWebElement(driver,locator, timeOut);
+			if(element != null)
+			{
+				select = new Select(element);
+				select.selectByValue(dropDownValue);
+				return true;
+			}
+			else
+				return false;
+		} catch (Exception e) {
+			logger.info("Exception raised in selectDropDownByValue method"+e.getMessage());
+			return false;
+		}
+	}
+
+	/**
+	 * Description: This method is used to wait until element is visible on given time wait.If the element is visible in given time it selects the dropdown based on the provided index
+	 *Parameters: WebDriver driver,By locator,int timeOut,int index
+	 *return: boolean
+	 *Method Name: selectDropDownByIndex
+	 *Note: This method will work if the drop down implemented using Select tag only
+	 */
+
+	public static boolean selectDropDownByIndex(WebDriver driver,By locator,int timeOut,int index)
+	{
+		try {
+			element = getWebElement(driver, locator,timeOut);
+			if(element != null)
+			{
+				select = new Select(element);
+				select.selectByIndex(index);
+				return true;
+			}
+			else
+				return false;
+		} catch (Exception e) {
+			logger.info("Exception raised in selectDropDownByIndex method"+e.getMessage());
+			return false;
+		}
+	}
+
+	/**
+	 * Description: This method is used to wait until element is visible on given time wait.If the element is visible in given time it retrieves the text otherwise null 
+	 *Parameters: WebDriver driver,By locator,int timeOut
+	 *return: String
+	 *Method Name: getText
+	 */
+
+	public static String getText(WebDriver driver,By locator,int timeOut)
+	{
+		try {
+			element = getWebElement(driver, locator,timeOut);
+			if(element != null)
+			{
+				return element.getText();
+			}
+			else
+				return null;
+		} catch (Exception e) {
+			logger.info("Exception raised in getText method"+e.getMessage());
+			return null;
+		}
+	}
+	
+	/**
+	 * Description: This method is used to get the element attribute value
+	 *Parameters: WebDriver driver,By locator,int timeOut,String attribute
+	 *return: String
+	 *Method Name: getElementAttributeValue
+	 */
+	public static String getElementAttributeValue(WebDriver driver,By locator,int timeOut,String attribute)
+	{
+		try {
+			element = getWebElement(driver, locator, timeOut);
+			if(element != null)
+				return element.getAttribute(attribute);
+			else
+				return null;
+			
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	/**
+	 * Description: This method is used to scroll to element 
+	 *Parameters: WebDriver driver,By locator
+	 *return: boolean
+	 *Method Name: scrollToElement
+	 */
+	public static boolean scrollToElement(WebDriver driver,By locator)
+	{
+		WebElement element = null;
+		try
+		{
+			JavascriptExecutor js = (JavascriptExecutor)driver;
+			element = driver.findElement(locator);
+			if(element == null)
+			{
+				logger.info("Element is not found");
+				return false;
+			}
+			else
+			{
+				js.executeScript("arguments[0].scrollIntoView(true);", element);
+				return true;
+			}
+		}catch(Exception e)
+		{
+			return false;
+		}
+
+	}
+
+	/**
+	 * Description: This method is used to scroll to element and perform click action using JavaScriptExecutor 
+	 *Parameters: WebDriver driver,By locator
+	 *return: boolean
+	 *Method Name: scrollToElementAndClick
+	 */
+	public static boolean scrollToElementAndClick(WebDriver driver,By locator)
+	{
+		try
+		{
+			boolean bStatus = scrollToElement(driver,locator);
+			if(!bStatus)
+				return false;
+			WebElement element = driver.findElement(locator);
+			if(element != null)
+			{
+				JavascriptExecutor js = (JavascriptExecutor)driver;
+				js.executeScript("arguments[0].click();",element );
+				return true;
+			}
+			else
+				return false;
+		}catch(Exception e){return false;}
+	}
+
+	/**
+	 * Description: This method is used to perform click action using JavaScriptExecutor 
+	 *Parameters: WebDriver driver,By locator
+	 *return: boolean
+	 *Method Name: clickElementByJS
+	 */
+	public static boolean clickElementByJS(WebDriver driver,By locator)
+	{
+		try
+		{
+			element = driver.findElement(locator);
+			if(element != null)
+			{
+				JavascriptExecutor js = (JavascriptExecutor)driver;
+				js.executeScript("arguments[0].click();",element );
+				return true;
+			}
+			else
+				return false;
+		}catch(Exception e){return false;}
+	}
+
+
+	/**
+	 * Description: This method is used to move the mouse on element
+	 *Parameters: WebDriver driver,By locator,int timeOut
+	 *return: boolean
+	 *Method Name: mouseMoveToElement
+	 */
+	public static boolean mouseMoveToElementandClick(WebDriver driver,By locator,int timeOut)
+	{
+		try
+		{
+			action = new Actions(driver);
+			element = getWebElement(driver, locator, timeOut);
+			if(element != null)
+			{
+				System.out.println(element);
+				action.moveToElement(element).build().perform();
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}catch(Exception e){return false;}
+	}
+
+	/**
+	 * Description: This method is used to perform mouse right click on element
+	 *Parameters: WebDriver driver,By locator,int timeOut
+	 *return: boolean
+	 *Method Name: contextClickOnElement
+	 */
+	public static boolean contextClickOnElement(WebDriver driver,By locator,int timeOut)
+	{
+		try
+		{
+			action = new Actions(driver);
+			element = getWebElement(driver, locator, timeOut);
+			if(element != null)
+			{
+				action.contextClick(element).build().perform();
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}catch(Exception e){return false;}
+	}
+
+	/**
+	 * Description: This method is used to perform mouse double click on element
+	 *Parameters: WebDriver driver,By locator,int timeOut
+	 *return: boolean
+	 *Method Name: doubleClickOnElement
+	 */
+	public static boolean doubleClickOnElement(WebDriver driver,By locator,int timeOut)
+	{
+		try
+		{
+			action = new Actions(driver);
+			element = getWebElement(driver, locator, timeOut);
+			if(element != null)
+			{
+				action.doubleClick(element).build().perform();
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}catch(Exception e){return false;}
+	}
+
+
+	/**
+	 * Description: This method is used to scroll to bottom of a page
+	 *Parameters: WebDriver driver
+	 *return: boolean
+	 *Method Name: scrollToBottomOfPage
+	 */
+	public static boolean scrollToBottomOfPage(WebDriver driver)
+	{
+		try
+		{
+			JavascriptExecutor js = (JavascriptExecutor)driver;
+			js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
+			return true;
+		}
+		catch(Exception e)
+		{
+			logger.info("Exception raised in scrollToBottomOfPage method."+e.getMessage());
+			return false;
+		}
+	}
+	
+	
+	/**
+	 * Description: This method is used to scroll to top of a page
+	 *Parameters: WebDriver driver
+	 *return: boolean
+	 *Method Name: scrollToTopOfPage
+	 */
+	
+	public static boolean clickElementUsingActions(WebDriver driver,By locator,int timeOut)
+	{
+		try {
+			element = getWebElement(driver, locator, timeOut);
+			if(element != null)
+			{
+				action = new Actions(driver);
+				action.click(element).build().perform();
+				return true;
+			}
+			else
+				return false;
+			
+		} catch (Exception e) {
+			return false;
+		}
+	}
+	
+	/**
+	 * Description: This method is used to set value using JavaScriptexecutor
+	 *Parameters: WebDriver driver,By locator,String data
+	 *Method Name: setValueByJS
+	 */
+	public static void setValueByJS(WebDriver driver,By locator,String data)
+	{
+		try {
+			JavascriptExecutor js = (JavascriptExecutor)driver;
+			element = driver.findElement(locator);
+			if(element != null)
+				js.executeScript("arguments[0].setAttribute('value', '" + data +"')", element);
+			
+		} catch (Exception e) {
+			logger.info("Exception raised in setValueByJS method"+e.getMessage());
+		}
+	}
+	
+	/**
+	 * Description: This method is used to press enter key on webelement
+	 *Parameters: WebDriver driver,By locator,int timeOut
+	 *Method Name: pressEnterKey
+	 */
+	public static void pressEnterKey(WebDriver driver,By locator,int timeOut)
+	{
+		try {
+			action = new Actions(driver);
+			element = getWebElement(driver, locator, timeOut);
+			if(element != null)
+				action.sendKeys(element, Keys.ENTER).build().perform();		
+		} catch (Exception e) {
+			logger.info("Exception raised in pressEnterKey method"+e.getMessage());
+		}
+	}
+	
+	/**
+	 * Description: This method is used to press key arrow HOME on webelement
+	 *Parameters: WebDriver driver,By locator,int timeOut
+	*Method Name: pressHOMEKey
+	 */
+	public static void pressHOMEKey(WebDriver driver,By locator,int timeOut)
+	{
+		try {
+			action = new Actions(driver);
+			element = getWebElement(driver, locator, timeOut);
+			if(element != null)
+				action.sendKeys(element, Keys.HOME).build().perform();		
+		} catch (Exception e) {
+			logger.info("Exception raised in pressHOMEKey method"+e.getMessage());
+		}
+	}
+	
+	/**
+	 * Description: This method is used to press key arrow END on webelement
+	 *Parameters: WebDriver driver,By locator,int timeOut
+	*Method Name: pressENDKey
+	 */
+	public static void pressENDKey(WebDriver driver,By locator,int timeOut)
+	{
+		try {
+			action = new Actions(driver);
+			element = getWebElement(driver, locator, timeOut);
+			if(element != null)
+				action.sendKeys(element, Keys.END).build().perform();	
+		} catch (Exception e) {
+			logger.info("Exception raised in pressENDKey method"+e.getMessage());
+		}
+	}
+	
+	/**
+	 * Description: This method is used to press tab key up on webelement
+	 *Parameters: WebDriver driver,By locator,int timeOut
+	 *Method Name: pressTabKey
+	 */
+	public static void pressTabKey(WebDriver driver,By locator,int timeOut)
+	{
+		try {
+			action = new Actions(driver);
+			element = getWebElement(driver, locator, timeOut);
+			if(element != null)
+				action.sendKeys(element, Keys.TAB).build().perform();	
+		} catch (Exception e) {
+			logger.info("Exception raised in pressTabKey method"+e.getMessage());
+		}
+	}
+}

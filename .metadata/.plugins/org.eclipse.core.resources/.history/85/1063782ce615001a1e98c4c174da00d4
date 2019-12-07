@@ -1,0 +1,39 @@
+package com.sinnerSchrader.qa.pages;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.events.EventFiringWebDriver;
+
+import com.sinnerSchrader.qa.base.TestBase;
+
+public class BrokenImagesPage extends TestBase {
+	EventFiringWebDriver eventFiringWebDriver=new EventFiringWebDriver (driver);
+
+	// Storing all the image element in the variable allImages
+	List allImages=eventFiringWebDriver.findElements(By.tagName("img"));
+	int countBrokenImages=0;
+
+	// Declaring a dynamic string of array which will store src of all the broken images
+	List BrokenimageUrl=new ArrayList();
+
+	String script="return (typeof arguments[0].naturalWidth!="undefined"&&arguments[0].naturalWidth>0)";
+
+	for (WebElement image : allImages){
+		Object imgStatus=eventFiringWebDriver.executeScript(script, image); 
+		if(imgStatus.equals(false)){
+			String currentImageUrl=image.getAttribute("src");
+			String imageUrl=currentImageUrl ;
+			BrokenimageUrl.add(imageUrl);
+			countBrokenImages++;
+		}
+	}
+
+	// Printing the src of the broken images if any
+	System.out.println("Number of broken images found in the page : " +countBrokenImages);
+	for (String z : BrokenimageUrl){
+		System.out.println(z);
+	}
+}
+}

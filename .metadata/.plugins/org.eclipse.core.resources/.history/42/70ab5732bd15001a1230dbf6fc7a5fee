@@ -1,0 +1,37 @@
+package com.sinnerSchrader.qa.pages;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.support.PageFactory;
+
+import com.sinnerSchrader.qa.base.TestBase;
+
+public class UserDetailsPage extends TestBase {
+	//Page ObjectRepository
+	public static By txtSliderRange = By.xpath("//input[@type= 'range']");	
+
+	// Initializing the elements with the help of page factory
+	public UserDetailsPage() {
+		PageFactory.initElements(driver, this);
+		driver.get(prop.getProperty("UserDetailsUrl"));
+
+	}
+
+	/**
+	 * Description: This method is used to Set the focus on the slider by mouseover on it and moving the slider using using Home and End keys to Min to Max and Max to Min. 
+	 * It asserts the Max and Min values of the slider in Extending report.
+	 * Keywords: mouseMoveToElementandClick, pressENDKey,pressHOMEKey, getElementAttributeValue
+	 * return: boolean	 
+	 */
+
+	public boolean viewUserDetails() {
+		try {
+
+
+			return true;
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+			return false;
+		}
+	}
+}

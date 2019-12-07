@@ -1,0 +1,16 @@
+package com.sinnerSchrader.qa.util;
+
+
+import org.apache.log4j.Logger;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+public class Global
+{
+    public static int timeOut = 10;
+    public static String path = System.getProperty("user.dir");
+	public static boolean bStatus;
+	
+
+}

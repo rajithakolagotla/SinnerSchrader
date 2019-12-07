@@ -1,0 +1,11 @@
+brokenImagesUrl = https://the-internet.herokuapp.com/broken_images
+loginUrl = https://the-internet.herokuapp.com/basic_auth
+MoveSliderUrl = https://the-internet.herokuapp.com/horizontal_slider
+UserDetailsUrl = https://the-internet.herokuapp.com/hovers  
+username = rajithardf4.kolagotla@gmail.com
+password = Test@1234
+browser = chrome
+firstName = Rajitha
+lastName = Kolagotla
+gender = Female
+uploadURL = https://www.studydrive.net/file-upload
